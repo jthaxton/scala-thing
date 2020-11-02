@@ -1,23 +1,22 @@
 name := """event_app"""
-organization := "events"
+// organization := "events"
 
-version := "1.0-SNAPSHOT"
+// // version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
-val AkkaVersion = "2.6.10"
-scalaVersion := "2.13.3"
+// val AkkaVersion = "2.6.10"
+scalaVersion := "2.12.6"
+
+version := "1.0"
 
 libraryDependencies += guice
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.6.10"
-libraryDependencies += "com.typesafe.akka" %% "akka-persistence" % "2.6.10"
-
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-persistence-query" % AkkaVersion,
-  "com.typesafe.akka" %% "akka-slf4j" % AkkaVersion,
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "com.typesafe.akka" %% "akka-cluster-typed" % AkkaVersion,
-  "com.typesafe.akka" %% "akka-protobuf-v3" % AkkaVersion,
-  "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
-  "com.typesafe.akka" %% "akka-serialization-jackson" % AkkaVersion
+  "com.typesafe.akka" %% "akka-actor" % "2.6.5",
+  "com.typesafe.akka" %% "akka-testkit" % "2.6.5" % Test,
+  "com.typesafe.akka" %% "akka-persistence" % "2.6.5",
+  "org.json4s" %% "json4s-native" % "3.6.0",
+  "com.okumin" %% "akka-persistence-sql-async" % "0.5.1",
+  "com.github.mauricio" %% "postgresql-async" % "0.2.+",
+  "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+  // "org.slf4j" % "slf4j-simple" % "1.7.25",
 )

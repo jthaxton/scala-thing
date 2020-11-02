@@ -1,15 +1,13 @@
 package controllers
 
-import domain.AggregateRoot
-import domain.DomainEvent
 import javax.inject._
 import play.api._
 import play.api.mvc._
 import play.api.libs.json._
-import akka.actor._
-import domain.commands.TestCommand
-import domain.handlers.TestHandler
-import akka.persistence.query.PersistenceQuery
+import akka.actor.{ActorRef, ActorSystem, Props}
+import domain._
+import domain.commands._
+
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -28,13 +26,13 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
   }
 
-  def test() = Action { implicit request: Request[AnyContent] =>
+  def startToDo() = Action { implicit request: Request[AnyContent] =>
     Ok(Json.obj("data" -> "This was successful", "errors" -> List[String]()))
-    // Ok(views.html.test())
+    callWithTodo()
+    Ok(views.html.test())
   }
 
   def events() = Action { implicit request: Request[AnyContent] =>
-      val system = ActorSystem("MySystem")
 
   // println(  PersistenceQuery(system).readJournalFor["id"]("akka.persistence.query.my-read-journal")
 // )
@@ -42,11 +40,14 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
     Ok(views.html.test())
   }
-  private def callWithTest() : Unit = {
-    val id = "TestStream$1"
-    val command = TestCommand(id)
 
-    TestHandler.call(command)
-    return null
+  private def callWithTodo() : Unit = {
+    todoActorRef() ! Start()
+  }
+
+  private def todoActorRef() : ActorRef = {
+    val system = ActorSystem("TestSystem")
+    val todo: ActorRef = system.actorOf(Props[ToDoHandler], "todo1")
+    todo
   }
 }
